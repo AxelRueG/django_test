@@ -7,7 +7,7 @@
 {% block content %}
   <h1>{{ title }}</h1>
 
-  <form action="{% url 'notificacion:index' %}" method="POST" class="mb-4">
+  <form action="{% url 'notificaciones:index' %}" method="POST" class="mb-4">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="submit" class="btn btn-primary" />
@@ -15,10 +15,35 @@
 
   {% for notificacion in notificaciones %}
     <div class="card mb-2">
-      <div class="card-body">
+      <div class="card-body d-flex justify-content-between">
         {{ notificacion.id }} : {{ notificacion.title }}
-        {% comment %} <a href="{% url 'notificacion:show' notificaion.id %}" class="btn btn-primary">ver</a> {% endcomment %}
+        <div class="d-flex">
+          <a href="{% url 'notificaciones:edit' notificacion.id %}" class="btn btn-primary">editar</a>
+          <form action="{% url 'notificaciones:delete' notificacion.id%}" method="post" class="delete-form ms-2">
+            {% csrf_token %}
+            <input type="submit" value="eliminar" class="btn btn-danger">
+          </form>
+        </div>
       </div>
     </div>
+
   {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+
+      const confirmDelete = event => {
+        event.preventDefault()
+        if (confirm('deseas eliminar esta notificacion')){
+          event.target.submit()
+        }
+      }
+
+      forms = [...document.getElementsByClassName('delete-form')]
+      forms.forEach(notification => notification.addEventListener('submit', confirmDelete))
+
+    </script>
+
 {% endblock %}

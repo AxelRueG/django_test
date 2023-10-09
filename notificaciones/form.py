@@ -1,7 +1,12 @@
 from django import forms
+from .models import Notificacion
 
+# class NotificacionForm(forms.Form):
+class NotificacionForm(forms.ModelForm):
+    class Meta:
+        model = Notificacion
+        fields = ['title', 'description']
 
-class NotificacionForm(forms.Form):
     title = forms.CharField(
         label='titulo',
         max_length=60,

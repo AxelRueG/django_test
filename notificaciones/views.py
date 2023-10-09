@@ -18,7 +18,7 @@ def index(request):
 
             notificacion.save()
 
-            return redirect(reverse('notificacion:index'))
+            return redirect('notificaciones:index')
     else:
         form = NotificacionForm()
 
@@ -31,9 +31,27 @@ def index(request):
         'form': form,
     })
 
-def show(request, notificacion_id):
+def edit(request, id):
     notificacion = get_object_or_404(Notificacion, pk=id)
-    return render(request, 'notificacion/show.html', {
-        'title': 'notificacion: ' + notificacion.id,
-        'notificacion': notificacion
+
+    if request.method == 'POST':
+        form = NotificacionForm(request.POST, instance=notificacion)
+        if form.is_valid():
+            form.save()
+            return redirect('notificaciones:index')
+    else:
+        form = NotificacionForm(instance= notificacion)
+
+    return render(request, 'notificaciones/show.html', {
+        'title': f'notificacion: {notificacion.id}',
+        'form': form,
+        'notificacion': notificacion,
     })
+
+def delete(request, id):
+    if request.method == 'POST':
+        notificacion = get_object_or_404(Notificacion, pk=id)
+        notificacion.delete()
+        return redirect('notificaciones:index')
+    else:
+        return redirect('notificacion:index')

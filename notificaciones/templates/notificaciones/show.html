@@ -5,7 +5,16 @@
 {% endblock %}
 
 {% block content %}
+  <div class="container">
+    <h1>{{ notificacion.id }} : {{ notificacion.title }}</h1>
 
-    <h1>{{ notificacion.title }}</h1>
-
+    <form action="{% url 'notificaciones:edit' notificacion.id %}" method="POST" class="mb-4">
+      {% csrf_token %}
+      {{ form }}
+      <div class="d-flex justify-content-between">
+        <input type="submit" value="submit" class="btn btn-primary" />
+        <a href="{% url 'notificaciones:index' %}" class="btn btn-secondary">cancelar</a>
+      </div>
+    </form>
+  </div>
 {% endblock %}
